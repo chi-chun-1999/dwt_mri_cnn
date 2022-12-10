@@ -1,0 +1,15 @@
+Dataset_path_test:
+  image_root    : "/mnt/chi-chun/data_disk/Dataset/kaggle_dataset/alzheimer_dataset/test/"
+  MildDemented  : "/mnt/chi-chun/data_disk/Dataset/kaggle_dataset/alzheimer_dataset/test/MildDemented/" 
+  ModerateDemented  : "/mnt/chi-chun/data_disk/Dataset/kaggle_dataset/alzheimer_dataset/test/ModerateDemented/" 
+  VeryMildDemented  : "/mnt/chi-chun/data_disk/Dataset/kaggle_dataset/alzheimer_dataset/test/VeryMildDemented/" 
+  NonDemented   : "/mnt/chi-chun/data_disk/Dataset/kaggle_dataset/alzheimer_dataset/test/NonDemented/" 
+
+Dataset_path_train:
+  image_root    : "/mnt/chi-chun/data_disk/Dataset/kaggle_dataset/alzheimer_dataset/train/"
+  MildDemented  : "/mnt/chi-chun/data_disk/Dataset/kaggle_dataset/alzheimer_dataset/train/MildDemented/" 
+  ModerateDemented  : "/mnt/chi-chun/data_disk/Dataset/kaggle_dataset/alzheimer_dataset/train/ModerateDemented/" 
+  VeryMildDemented  : "/mnt/chi-chun/data_disk/Dataset/kaggle_dataset/alzheimer_dataset/train/VeryMildDemented/" 
+  NonDemented   : "/mnt/chi-chun/data_disk/Dataset/kaggle_dataset/alzheimer_dataset/train/NonDemented/" 
+
+
