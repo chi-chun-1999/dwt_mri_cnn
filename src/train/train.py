@@ -88,7 +88,6 @@ class DwtConvTrain(TrainMethod):
                     #scheduler.step()
                     epoch_loss = running_loss / n_sample
                     epoch_acc = running_corrects.double() / n_sample
-                    print(running_corrects,n_sample)
                     writer_train.add_scalar('Acc',epoch_acc,epoch)
                     writer_train.add_scalar('Loss',epoch_loss,epoch)
 
