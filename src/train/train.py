@@ -1,6 +1,14 @@
+import os
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+
 import torch
 import abc
 import copy
+import time
+from torch.utils.tensorboard import SummaryWriter
+from src.evaluate.confusion_matrix import createConfusionMatrix
+
 
 class TrainMethod(abc.ABC):
     # abstract Class
@@ -20,10 +28,17 @@ class DwtConvTrain(TrainMethod):
 
     def __init__(self, model, dataloader, criterion, optimizer, evaluation = None, epochs = 25):
 
-        super().__init__( model, dataloader, criterion, optimizer, evaluation, epoch)
+        super().__init__( model, dataloader, criterion, optimizer, evaluation, epochs)
         self._device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     def fit(self):
+        since = time.time() # 記錄開始時間
+        timestr = time.strftime("%Y%m%d-%H%M%S")
+        train_store_path = 'runs/train_'+type(self._model).__name__+'_'+timestr
+        val_store_path = 'runs/val_'+type(self._model).__name__+'_'+timestr
+
+        writer_train = SummaryWriter(train_store_path)
+        writer_val = SummaryWriter(val_store_path)
         best_model_wts = copy.deepcopy(self._model.state_dict())
         best_acc = 0.0
 
@@ -73,10 +88,15 @@ class DwtConvTrain(TrainMethod):
                     #scheduler.step()
                     epoch_loss = running_loss / n_sample
                     epoch_acc = running_corrects.double() / n_sample
+                    print(running_corrects,n_sample)
+                    writer_train.add_scalar('Acc',epoch_acc,epoch)
+                    writer_train.add_scalar('Loss',epoch_loss,epoch)
 
                 elif phase == 'val':
                     epoch_loss = running_loss / n_val_sample
                     epoch_acc = running_corrects.double() / n_val_sample
+                    writer_val.add_scalar('Acc',epoch_acc,epoch)
+                    writer_val.add_scalar('Loss',epoch_loss,epoch)
 
                 print('{} Loss: {:.4f} Acc: {:.4f}'.format(
                     phase, epoch_loss, epoch_acc))
@@ -84,10 +104,14 @@ class DwtConvTrain(TrainMethod):
                 # 記錄最佳模型
                 if phase == 'val' and epoch_acc > best_acc:
                     best_acc = epoch_acc
-                    best_model_wts = copy.deepcopy(model.state_dict())
+                    best_model_wts = copy.deepcopy(self._model.state_dict())
     # 輸出最佳準確度
         print('Best val Acc: {:4f}'.format(best_acc))
 
         # 載入最佳模型參數
         self._model.load_state_dict(best_model_wts)
+        heatmap,cf_matrix = createConfusionMatrix(self._model,self._dataloader['val'],('VeryMildDemented','NonDemented'))
+        writer_val.add_figure("Confusion Matrix",heatmap)
+        writer_val.close()
+        writer_train.close()
         return self._model
