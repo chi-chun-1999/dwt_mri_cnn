@@ -43,9 +43,9 @@ def get_jpg_path(dataset_path_dict):
 
 
 class MRIDataset(Dataset):
-    def __init__(self, dataset_path_dict):
+    def __init__(self, dataset_path_dict,dwt_times = 1):
         # load all nii handle in a list
-        self._img_transfer = DiscreteWaveletTransform(times=1)
+        self._img_transfer = DiscreteWaveletTransform(times=dwt_times)
         self._initial_dataset(dataset_path_dict)
 
         #print(self._label)
