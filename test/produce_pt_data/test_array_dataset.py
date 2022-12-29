@@ -10,6 +10,7 @@ from torch.utils.data import DataLoader
 from chun_img_browser.img_browser import ImgBrowser
 from src.data.load_data.load_data import MRIDatasetResize
 from src.train.train import DwtConvTrain
+from torch.utils.data import TensorDataset
 import yaml
 import numpy as np
 import torch.nn as nn
@@ -24,13 +25,19 @@ if __name__ == '__main__':
 
         dwt_times = 3
 
-        test_data_dict = data['2Dataset_path_test']
-        test_dataset = MRIDatasetResize(test_data_dict,dwt_times=dwt_times)
-        
-        train_data_dict = data['2Dataset_path_train']
-        train_dataset = MRIDatasetResize(train_data_dict,dwt_times=dwt_times)
+        data_dict = data['ArrayData']['2class_data']['haar_3']
 
-        dataloader = {'train':DataLoader(train_dataset,batch_size=10,shuffle=True),'val':DataLoader(test_dataset,batch_size=10,shuffle=True)}
+        train_inputs = torch.load(data_dict['resize_train_inputs'])
+        train_labels = torch.load(data_dict['resize_train_labels'])
+        val_inputs = torch.load(data_dict['resize_val_inputs'])
+        val_labels = torch.load(data_dict['resize_val_labels'])
+
+
+        train_dataset = TensorDataset(train_inputs,train_labels)
+        
+        val_dataset =TensorDataset(val_inputs,val_labels) 
+
+        dataloader = {'train':DataLoader(train_dataset,batch_size=10,shuffle=True),'val':DataLoader(val_dataset,batch_size=10,shuffle=True)}
 
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         dwt_cnn = DwtConvNet2Class().to(device)
@@ -48,10 +55,10 @@ if __name__ == '__main__':
         #    #print(loss)
 
         #    break
-        optimizer_ft = optim.SGD(dwt_cnn.parameters(),lr=0.01,momentum=0.9)
+        #optimizer_ft = optim.SGD(dwt_cnn.parameters(),lr=0.01,momentum=0.9)
 
-        dwt_train = DwtConvTrain(dwt_cnn,dataloader,criterion,optimizer_ft,epochs=500)
+        #dwt_train = DwtConvTrain(dwt_cnn,dataloader,criterion,optimizer_ft,epochs=500)
 
-        dwt_train.fit()
+        #dwt_train.fit()
 
 

@@ -8,7 +8,9 @@ from torch.utils.data import DataLoader
 from chun_img_browser.img_browser import ImgBrowser
 from src.data.transform.image_transform import DiscreteWaveletTransform
 from src.data.load_data.load_data import get_jpg_path
+from src.data.load_data.load_data import MRIDatasetResizeMedian
 from src.data.load_data.load_data import MRIDatasetResize
+from src.data.load_data.load_data import MRIDataset
 import yaml
 import numpy as np
 
@@ -21,13 +23,15 @@ if __name__ == "__main__":
         data = yaml.load(parameter_yml,Loader=yaml.CLoader)
 
         test_data_dict = data['Dataset_path_test']
-        test_dataset = MRIDatasetResize(test_data_dict,dwt_times=0)
+        test_dataset = MRIDatasetResizeMedian(test_data_dict,dwt_times=3)
+        #test_dataset = MRIDatasetResize(test_data_dict,dwt_times=0)
         
         train_data_dict = data['Dataset_path_train']
-        train_dataset = MRIDatasetResize(train_data_dict,dwt_times=0)
+        train_dataset = MRIDatasetResizeMedian(train_data_dict,dwt_times=3)
+        #train_dataset = MRIDatasetResize(train_data_dict,dwt_times=3)
 
-        train_dataloader = DataLoader(train_dataset,batch_size=10,shuffle=True)
-        test_dataloader = DataLoader(test_dataset,batch_size=10,shuffle=True)
+        train_dataloader = DataLoader(train_dataset,batch_size=1,shuffle=True)
+        test_dataloader = DataLoader(test_dataset,batch_size=1,shuffle=True)
 
         for inputs, label in train_dataloader:
             print(inputs.shape)
@@ -35,9 +39,6 @@ if __name__ == "__main__":
             break
 
         imgb.imshow(np.array(test_dataset[0][0][0]))
-
-
-
         
 
 

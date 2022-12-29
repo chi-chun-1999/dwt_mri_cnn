@@ -22,3 +22,11 @@ Dataset_path_train:
   image_root    : "/mnt/chi-chun/data_disk/Dataset/kaggle_dataset/alzheimer_dataset/train/"
   VeryMildDemented  : "/mnt/chi-chun/data_disk/Dataset/kaggle_dataset/alzheimer_dataset/train/VeryMildDemented/" 
   NonDemented   : "/mnt/chi-chun/data_disk/Dataset/kaggle_dataset/alzheimer_dataset/train/NonDemented/" 
+
+ArrayData:
+  2class_data  :
+    haar_3:
+      resize_train_inputs: "/home/chi-chun/demetia/dwt_cnn_mri_image/pt_data/haar_3/resize_train_2class_data_inputs.pt"
+      resize_train_labels: "/home/chi-chun/demetia/dwt_cnn_mri_image/pt_data/haar_3/resize_train_2class_data_labels.pt"
+      resize_val_inputs: "/home/chi-chun/demetia/dwt_cnn_mri_image/pt_data/haar_3/resize_val_2class_data_inputs.pt"
+      resize_val_labels: "/home/chi-chun/demetia/dwt_cnn_mri_image/pt_data/haar_3/resize_val_2class_data_labels.pt"
